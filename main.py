@@ -1,4 +1,4 @@
-from botocore.exceptions import ClientError
+#from botocore.exceptions import ClientError
 from cryptography.fernet import Fernet
 import base64
 import boto3
@@ -24,8 +24,8 @@ def get_secret():
         get_secret_value_response = secretsmanager.get_secret_value(
             SecretId=aws_secret_name
         )
-    except ClientError as e:
-        print("Unexpected error: %s" % e)
+    except:
+        print("Unexpected error:")
         raise
     else:
         if 'SecretString' in get_secret_value_response:
