@@ -4,7 +4,7 @@ async function getEncryptionKey():Promise<string>{
     return new Promise((resolve,reject)=>{
         let python = spawn('python3',['../encryptionKey/getEncryptionKey.py'])
         python.stdout.on('data',(data)=>{
-            resolve(data);
+            resolve(data.toString());
         })
         python.stderr.on('data',(data)=>{
             reject(`Cannot communicate with PYTHON ${data}`);
