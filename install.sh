@@ -1,0 +1,2 @@
+cd sessionIdEncrypter
+npm i
