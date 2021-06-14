@@ -1,2 +1,2 @@
 cd sessionIdEncrypter
-ts-node index.ts
+node node_modules/ts-node index.ts

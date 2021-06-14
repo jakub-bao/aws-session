@@ -9,9 +9,8 @@
   "author": "Jakub",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
-  },
-  "devDependencies": {
-    "@types/node": "^15.12.2"
+    "express": "^4.17.1",
+    "@types/node": "^15.12.2",
+    "ts-node": "^10.0.0"
   }
 }
