@@ -1,8 +1,9 @@
 import express from 'express';
+import {sessionIdEncrypter} from "./sessionIdEncrypter";
 const app = express()
 
-app.get('/pdapsession', async function (req, res) {
-    res.send(req.headers)
-})
+const url = '/pdapsession';
+const port = 3000;
 
-app.listen(3000)
+app.get(url, sessionIdEncrypter)
+app.listen(port,()=>console.log(`Session encrypter listening on http://localhost:${port}${url}`))
