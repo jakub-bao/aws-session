@@ -12,9 +12,13 @@ async function getEncryptionKey():Promise<string>{
     });
 }
 
+function parse(jsonResponse:string):string{
+    return JSON.parse(jsonResponse).ENCRYPTION_KEY;
+}
+
 export async function sessionIdEncrypter(req,res){
     try {
-        let encryptionKey = await getEncryptionKey();
+        let encryptionKey = await getEncryptionKey().then(parse);
         res.send({cookie: req.headers.cookie, encryptionKey});
     } catch(e){
         res.status(500).send(e);
