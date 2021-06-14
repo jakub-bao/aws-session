@@ -29,3 +29,5 @@ def get_secret():
             secret = base64.b64decode(get_secret_value_response['SecretBinary'])
 
     return secret
+
+print(get_secret())
