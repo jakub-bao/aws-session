@@ -7,5 +7,5 @@ def encrypt(key,message):
     cookie_encoded = str(message).encode('utf-8')
     f.encrypt(cookie_encoded).decode('utf-8')
 
-encrypted = encrypt(sys.argv[1],sys.argv[2])
+encrypted = encrypt(sys.argv[2],sys.argv[3])
 print(encrypted)
