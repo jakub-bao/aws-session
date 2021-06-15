@@ -1,5 +1,5 @@
 import express from 'express';
-import {sessionIdEncrypter} from "./sessionIdEncrypter";
+import {sessionIdEncrypter} from "./modules/sessionIdEncrypter";
 const app = express()
 
 const url = '/pdapsession';
