@@ -49,12 +49,10 @@ def lambda_handler(event, context):
     # Improves formatting in CWLogs web consule and ensures plain JSON
     logger.info(json.dumps(event, separators=(',', ':')))
 
-    response_body = {}
+    response_body = ''
 
     if event['headers'].get('cookie', '') != '':
-        response_body['headers'] = {
-            'cookie': event['headers']['cookie']
-        }
+        response_body = event['headers']['cookie']
 
     # Escape JSON, convert to UTF-8 byte string, and encrypt
     body_bytes = json.dumps(response_body, separators=(',', ':')).encode('utf-8')
