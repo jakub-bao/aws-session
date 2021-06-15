@@ -5,6 +5,7 @@ import boto3
 import json
 import os
 
+# Use the recommended logger in Lambda
 # https://docs.aws.amazon.com/lambda/latest/dg/python-logging.html#python-logging-lib
 import logging
 
@@ -13,9 +14,20 @@ logger.setLevel(logging.INFO)
 
 
 def get_secret():
-    aws_secret_name = os.environ['SECRET_ARN']
-    aws_region_name = os.environ['SECRET_REGION']
+    # Simplify and adapt the code sample from AWS Secrets Manager
 
+    # Secret ARN provided by the environment
+    aws_secret_name = os.environ['SECRET_ARN']
+    logger.info(f"aws_secret_name={aws_secret_name}")
+
+    # Secret region can be provided by the environment or determined by the full ARN
+    if os.environ.get('SECRET_REGION', '') != '':
+        aws_region_name = os.environ['SECRET_REGION']
+    else:
+        aws_region_name = aws_secret_name.split(':')[3]
+    logger.info(f"aws_region_name={aws_region_name}")
+
+    # boto3 session needs to be in the same region as the secret
     boto3_session = boto3.session.Session()
     secretsmanager = boto3_session.client(
         service_name='secretsmanager',
@@ -39,31 +51,38 @@ def get_secret():
 
 
 def lambda_handler(event, context):
-    aws_secret_value = json.loads(get_secret())
-    key_string = aws_secret_value['ENCRYPTION_KEY']
-    key = key_string.encode('utf-8')
-    f = Fernet(key)
-
+    # Log the incoming request for debugging
     logger.info("Request event:")
-    # Specifying separators removes all prettifying and prints a single line:
-    # Improves formatting in CWLogs web consule and ensures plain JSON
+    # Specifying separators removes all prettifying and prints a single line;
+    # Improves formatting in CWLogs web console and ensures plain JSON
     logger.info(json.dumps(event, separators=(',', ':')))
 
-    response_body = ''
+    # Default response is "Bad Request" and an empty response body
+    response_code = 400
+    response_body = ""
 
+    # If 'cookie' is under 'headers', set the value as the encrypted response body
     if event['headers'].get('cookie', '') != '':
-        response_body = event['headers']['cookie']
+        # OK
+        response_code = 200
 
-    # Escape JSON, convert to UTF-8 byte string, and encrypt
-    body_bytes = json.dumps(response_body, separators=(',', ':')).encode('utf-8')
-    body_encrypted = f.encrypt(body_bytes).decode('utf-8')
+        # Read the encryption secret from AWS Secrets Manager as a Fernet key
+        aws_secret_value = json.loads(get_secret())
+        key_string = aws_secret_value['ENCRYPTION_KEY']
+        key = key_string.encode('utf-8')
+        f = Fernet(key)
 
+        # Convert to UTF-8 byte string for Fernet, and encrypt
+        cookie_encoded = str(event['headers']['cookie']).encode('utf-8')
+        response_body = f.encrypt(cookie_encoded).decode('utf-8')
+
+    # Send back the format required for ALB
     response = {
-        "statusCode": 200,
+        "statusCode": response_code,
         "headers": {
             "Content-Type": "text/plain"
         },
-        "body": body_encrypted
+        "body": response_body
     }
 
     logger.info("Response:")

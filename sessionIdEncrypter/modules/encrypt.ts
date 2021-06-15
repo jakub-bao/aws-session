@@ -1,6 +1,3 @@
-import Cryptr from 'cryptr';
+export async function encrypt(key:string, message:string):Promise<string>{
 
-export const encrypt = (key:string, message:string)=>{
-    const cryptr = new Cryptr(key);
-    return cryptr.encrypt(message);
 }
