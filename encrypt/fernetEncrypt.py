@@ -5,10 +5,9 @@ def encrypt(key,message):
     utf_key = key.encode('utf-8')
     f = Fernet(utf_key)
     cookie_encoded = str(message).encode('utf-8')
-    f.encrypt(cookie_encoded).decode('utf-8')
+    return f.encrypt(cookie_encoded).decode('utf-8')
 
 key = sys.argv[1]
 msg = sys.argv[2]
-print(key,msg)
 encrypted = encrypt(key,msg)
 print(encrypted)
