@@ -6,7 +6,7 @@ export async function sessionIdEncrypter(req,res){
         let originalSessionId:string = req.headers.cookie;
         let encryptionKey:string = await getEncryptionKey();
         let encryptedSessionId = await encrypt(encryptionKey, originalSessionId);
-        res.send({originalSessionId, encryptionKey, encryptedSessionId});
+        res.send(encryptedSessionId);
     } catch(e){
         res.status(500).send(e);
     }
