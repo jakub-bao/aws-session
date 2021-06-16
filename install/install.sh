@@ -5,6 +5,10 @@ installNode () {
     yum install -y nodejs
 }
 
+installPython(){
+    pip3 install boto3
+}
+
 installDeps(){
     (cd sessionIdEncrypter && npm i)
 }

@@ -2,10 +2,6 @@
 import base64
 import boto3
 import os
-import logging
-
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
 
 def get_secret():
     aws_secret_name = os.environ['SECRET_ARN']
