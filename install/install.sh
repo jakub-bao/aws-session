@@ -6,11 +6,14 @@ installNode () {
 }
 
 installPython(){
+    pip3 install --upgrade pip
     pip3 install boto3
+    pip3 install setuptools_rust
+    pip3 install cryprography
 }
 
 installDeps(){
-    (cd sessionIdEncrypter && npm i)
+    (cd webserver && npm i)
 }
 
 installNode
